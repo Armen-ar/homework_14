@@ -84,7 +84,7 @@ def search_by_genre(genre):
         cursor = connection.cursor()
         query = (f"""SELECT title, description
                 FROM netflix
-                WHERE listed_in = {genre}
+                WHERE listed_in LIKE '%{genre}%'
                 ORDER BY release_year DESC
                 LIMIT 10
                 """
@@ -130,6 +130,6 @@ def search_by_actors(actor_1, actor_2):
 
 # print(search_by_title('Am'))
 # print(search_by_range_of_years(2019, 2020))
-# print(search_by_genre('listed_in'))
+# print(search_by_genre('Documentaries'))
 # print(search_by_actors('Rose McIver', 'Ben Lamb'))
 # print(search_by_actors('Jack Black', 'Dustin Hoffman'))

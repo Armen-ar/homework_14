@@ -52,14 +52,16 @@ def search_movie_by_rating(rating):
 def search_movie_by_genre(genre):
     logger.debug("Запрошен фильм по жанру")
     try:
-        if genre == 'жанр':
-            movie_by_genre = search_by_genre('listed_in')
-            return movie_by_genre
-        else:
-            "Некорректный запрос"
+        movie_by_genre = search_by_genre(genre)
+        return movie_by_genre
     except:
         return "Ошибка поиска фильма по жанру"
 
 
 if __name__ == "__main__":
     app.run(debug=True, port=2910)
+
+# genre: Documentaries, Music & Musicals, International TV Shows, Reality TV,
+# Documentaries, International Movies, Music & Musicals, Dramas, International Movies, Music & Musicals
+# Children & Family Movies, Comedies, International TV Shows, Spanish-Language TV Shows, Stand-Up Comedy & Talk Shows
+# Comedies, Horror Movies, Kids TV, Korean TV Shows, TV Comedies
