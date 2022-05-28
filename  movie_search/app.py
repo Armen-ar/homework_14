@@ -1,62 +1,65 @@
 import logging
 
-from flask import app, Flask
-from utils import movie_info
+import logger as logger
+from flask import Flask
+from utils import search_by_title, search_by_range_of_years, search_by_rating, search_by_genre
 
-logger = logging.getLogger("../basic")
+logger.create_logger()
+
+logger = logging.getLogger("basic")
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
 
-@app.route('/movie/<_title>')
-def search_title_movie(_title):
-    logger.debug("Запрошен фильм")
+@app.route('/movie/<title>')
+def search_movie_by_title(title):
+    logger.debug("Запрошен фильм по названию")
     try:
-        title_movie = movie_info(_title)
-        return title_movie
+        movie_title = search_by_title(title)
+        return movie_title
     except:
         return "Ошибка поиска фильма по названию"
 
 
+@app.route('/movie/<int:year_1>/to/<int:year_2>')
+def search_movie_by_range_of_years(year_1, year_2):
+    logger.debug("Запрошен фильм по дате выпуска в прокат")
+    try:
+        movie_title_release_year = search_by_range_of_years(year_1, year_2)
+        return movie_title_release_year
+    except:
+        return "Ошибка поиска фильма по дате выпуска в прокат"
+
+
+@app.route('/rating/<rating>')
+def search_movie_by_rating(rating):
+    logger.debug("Запрошен фильм по рейтингу")
+    try:
+        if rating == 'children':
+            movie_by_rating = search_by_rating('(\'G\')')
+        elif rating == 'family':
+            movie_by_rating = search_by_rating(('G', 'PG', 'PG-13'))
+        elif rating == 'adult':
+            movie_by_rating = search_by_rating(('R', 'NC-17'))
+
+        return movie_by_rating
+    except:
+        return "Ошибка поиска фильма по рейтингу"
+
+
+@app.route('/genre/<genre>')
+def search_movie_by_genre(genre):
+    logger.debug("Запрошен фильм по жанру")
+    try:
+        if genre == 'жанр':
+            movie_by_genre = search_by_genre('listed_in')
+            return movie_by_genre
+        else:
+            "Некорректный запрос"
+    except:
+        return "Ошибка поиска фильма по жанру"
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=2910)
-#
-# @movie_blueprint.route('/movie/<title>')
-# def post_one(post_pk):
-#     logger.debug(f"Запрошен пост {post_pk}")
-#     try:
-#         post = posts_dao.get_by_pk(post_pk)
-#         comments = comments_dao.get_by_post_pk(post_pk)
-#         number_of_comments = len(comments)
-#         return render_template('post.html', post=post, comments=comments,
-#                                number_of_comments=number_of_comments)
-#     except:
-#         return "Ошибка открытия одного поста с комментами"
-#
-#
-# @posts_blueprint.route('/search/')
-# def post_search():
-#     query = request.args.get("s", "")
-#     logger.debug("Запрошены посты по вхождению")
-#     try:
-#         if query != "":
-#             posts = posts_dao.search(query)
-#             number_of_posts = len(posts)
-#         else:
-#             posts = []
-#             number_of_posts = 0
-#         return render_template('search.html', query=query, posts=posts, number_of_posts=number_of_posts)
-#     except:
-#         return "Ошибка при поиске по вхождению"
-#
-#
-# @posts_blueprint.route('/users/<username>/')
-# def post_by_user(username):
-#     logger.debug("Запрошен пост по имени")
-#     try:
-#         posts_by_user = posts_dao.get_by_user(username)
-#         number_of_posts = len(posts_by_user)
-#         return render_template('user_feed.html', posts_by_user=posts_by_user, number_of_posts=number_of_posts)
-#     except:
-#         return "Ошибка открытия поста по имени"
