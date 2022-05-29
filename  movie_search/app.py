@@ -1,4 +1,5 @@
 import logging
+from sqlite3 import DatabaseError
 
 import logger as logger
 from flask import Flask, jsonify
@@ -19,7 +20,7 @@ def search_movie_by_title(title):
     try:
         movie_title = search_by_title(title)
         return movie_title
-    except:
+    except DatabaseError:
         return "Ошибка поиска фильма по названию"
 
 
@@ -29,7 +30,7 @@ def search_movie_by_range_of_years(year_1, year_2):
     try:
         movie_title_release_year = jsonify(search_by_range_of_years(year_1, year_2))
         return movie_title_release_year
-    except:
+    except DatabaseError:
         return "Ошибка поиска фильма по дате выпуска в прокат"
 
 
@@ -39,7 +40,7 @@ def search_movie_by_rating(rating):
     try:
         movie_by_rating = jsonify(search_by_rating(rating))
         return movie_by_rating
-    except:
+    except DatabaseError:
         return "Ошибка поиска фильма по рейтингу"
 
 
@@ -49,7 +50,7 @@ def search_movie_by_genre(genre):
     try:
         movie_by_genre = jsonify(search_by_genre(genre))
         return movie_by_genre
-    except:
+    except DatabaseError:
         return "Ошибка поиска фильма по жанру"
 
 

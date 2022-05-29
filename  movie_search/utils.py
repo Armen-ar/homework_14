@@ -46,13 +46,10 @@ def search_by_range_of_years(year_1, year_2):
 
     movie_title_release_year = []
     for movie in range_of_years:
-        movie_title = {
+        movie_title_release_year.append({
             "title": movie[0],
             "release_year": movie[1],
-        }
-
-        movie_title_release_year.append(movie_title)
-
+        })
     return movie_title_release_year
 
 
@@ -74,13 +71,11 @@ def search_by_rating(rating):
 
     movie_by_rating = []
     for movie in movie_by_rating_all:
-        movie_one_by_rating = {
+        movie_by_rating.append({
             "title": movie[0],
             "rating": movie[1],
             "description": movie[2]
-        }
-        movie_by_rating.append(movie_one_by_rating)
-
+        })
     return movie_by_rating
 
 
@@ -96,12 +91,10 @@ def search_by_genre(genre):
 
     movie_by_genre = []
     for movie in by_genre:
-        movie_one_by_genre = {
+        movie_by_genre.append({
             "title": movie[0],
             "description": movie[1]
-        }
-        movie_by_genre.append(movie_one_by_genre)
-
+        })
     return movie_by_genre
 
 
@@ -140,13 +133,10 @@ def search_movie_by_param(type_movie, release_year, genre):
 
     movie_by_param = []
     for movie in by_param:
-        movie_one_by_param = {
+        movie_by_param.append({
             "title": movie[0],
             "description": movie[1]
-        }
-
-        movie_by_param.append(movie_one_by_param)
-
+        })
     return movie_by_param
 
 
