@@ -1,10 +1,11 @@
 import sqlite3
 from collections import Counter
+from typing import Union
 
 from flask import jsonify
 
 
-def execute_query(query):
+def execute_query(query: str) -> list[dict]:
     with sqlite3.connect("../netflix.db") as connection:
         cur = connection.cursor()
         cur.execute(query)
@@ -12,7 +13,7 @@ def execute_query(query):
         return result
 
 
-def search_by_title(title):
+def search_by_title(title: str):
     query = f"""SELECT title, country, release_year, listed_in, description
     FROM netflix 
     WHERE type = 'Movie' AND title LIKE '{title}%'
@@ -34,7 +35,7 @@ def search_by_title(title):
     return json_movie_title
 
 
-def search_by_range_of_years(year_1, year_2):
+def search_by_range_of_years(year_1: str, year_2: str) -> list[dict]:
     query = f"""SELECT title, release_year
     FROM netflix
     WHERE release_year BETWEEN '{year_1}' AND '{year_2}'
@@ -53,7 +54,7 @@ def search_by_range_of_years(year_1, year_2):
     return movie_title_release_year
 
 
-def search_by_rating(rating):
+def search_by_rating(rating: str) -> Union[str, list[dict]]:
     parameters = {
         "children": "'G'",
         "family": "'G', 'PG', 'PG-13'",
@@ -79,7 +80,7 @@ def search_by_rating(rating):
     return movie_by_rating
 
 
-def search_by_genre(genre):
+def search_by_genre(genre: str) -> list[dict]:
     query = f"""SELECT title, description
     FROM netflix
     WHERE listed_in LIKE '%{genre}%'
@@ -98,7 +99,7 @@ def search_by_genre(genre):
     return movie_by_genre
 
 
-def search_by_actors(actor_1, actor_2):
+def search_by_actors(actor_1: str, actor_2: str) -> list[str]:
     query = f"""SELECT `cast`
     FROM netflix
     WHERE `cast` LIKE '%{actor_1}%' AND `cast` LIKE '%{actor_2}%'
@@ -119,11 +120,7 @@ def search_by_actors(actor_1, actor_2):
     return movie_by_actor
 
 
-# print(search_by_actors('Rose McIver', 'Ben Lamb'))
-# print(search_by_actors('Jack Black', 'Dustin Hoffman'))
-
-
-def search_movie_by_param(type_movie, release_year, genre):
+def search_movie_by_param(type_movie: str, release_year: int, genre: str) -> list[dict]:
     query = f"""SELECT title, description
     FROM netflix
     WHERE type = '{type_movie}' AND release_year = {release_year} AND listed_in LIKE '%{genre}%'
@@ -138,6 +135,3 @@ def search_movie_by_param(type_movie, release_year, genre):
             "description": movie[1]
         })
     return movie_by_param
-
-
-# print(search_movie_by_param('Movie', 2017, 'Documentaries'))
